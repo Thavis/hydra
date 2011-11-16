@@ -1,0 +1,17 @@
+** Simple enumeration:
+
+val1
+val2
+val3
+
+Values are ordered and limited to listed values.
+
+** Enumeration extension:
+
+before start:
+val01
+val01
+after val1:
+val11
+before val3: val21
+after end: val31

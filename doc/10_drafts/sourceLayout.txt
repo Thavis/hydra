@@ -1,0 +1,4 @@
+
+1. Java-like: All sources produces independent definitions. Main definition is not pointed at compile time and must be chosen every time at runtime. Such solution does not allow for local definitions, every file will produce public artifact.
+
+2. Script-like: Main source is pointed at compile time. Only referenced definitions are processed during compilation. It allows for scope dependent compilation but cant be used in libraries.

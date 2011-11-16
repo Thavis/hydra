@@ -1,0 +1,39 @@
+************************************************************
+* COMPLEX RECURRENCE
+************************************************************
+
+main:
+00    argument
+argument:
+01    expression
+02    value
+expression:
+03    argument operator argument
+
+S000:
+// $ main eof->done
+// $ argument->main
+// $ expression->argument
+// $ value->argument
+// $ argument operator argument -> expression
+value -> S001:
+
+S001: S000 by value
+// ## value $ -> argument ##
+// argument $ -> main
+// argument $ operator argument -> expression
+// main $ eof -> done
+eof -> done
+operator -> S002:
+
+S002: S001 by operator
+// argument operator $ argument -> expression
+// $ expression->argument
+// $ value->argument
+// $ argument operator argument -> expression
+value: S003
+
+S003: S002 by value
+// ## value $ -> argument ##
+// argument operator argument $ -> expression
+// argument $ operator argument -> expression

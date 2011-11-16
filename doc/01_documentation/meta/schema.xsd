@@ -1,0 +1,54 @@
+<xsd:schema xmlns="http://tnt-code.com/schema/hydra/doc"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            targetNamespace="http://tnt-code.com/schema/hydra/doc"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:element name="chapter">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="contentType">
+                    <xsd:sequence>
+                        <xsd:element name="summary" type="contentType"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="title"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <xsd:element name="list">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="li" minOccurs="1" maxOccurs="unbounded" type="contentType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="dict">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="di" minOccurs="1" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:complexContent>
+                            <xsd:extension base="contentType">
+                                <xsd:attribute name="name" use="required"/>
+                            </xsd:extension>
+                        </xsd:complexContent>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="contentType" mixed="true">
+        <xsd:sequence>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:element ref="list"/>
+                <xsd:element ref="dict"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

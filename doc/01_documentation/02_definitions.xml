@@ -1,0 +1,17 @@
+<chapter title="Definitions"
+        xmlns="http://tnt-code.com/schema/hydra/doc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://tnt-code.com/schema/hydra/doc meta/schema.xsd">
+
+    <summary>List of used definitions with explanations.</summary>
+
+    <dict>
+        <di name="Token">Atomic chain of characters representing single parsing unit.</di>
+        <di name="Grammar">Set of instructions defining rules of constructing and parsing source.</di>
+        <di name="Grammar library">Artifact representing reusable and redefinable set of grammar instructions.</di>
+        <di name="Instruction override">Redefinition of grammar instruction within specified scope under original name.</di>
+        <di name="Instruction extension">Constructing new grammar instruction by extending existing definition.</di>
+        <di name="Language injections">Wrapping different grammar withing specified elements of defined language. For example argument of every java.sql.Statement.executeQuery call can be resolved as SQL statements.</di>
+        <di name="Language embedding">Including different grammar as native part of specified language. For example including native XML as part of source code.</di>
+    </dict>
+</chapter>

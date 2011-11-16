@@ -1,0 +1,18 @@
+1. Pull compilation
+    During compilation of single source compiler may need to access definitions from other source. If definition is already compiled then compiled version should be provided. Otherwise requested source should be compiled before definition is returned.
+
+2. Push compilation
+    If compiler is aware of dependant sources then it should generate proper events triggering compilation of dependants.
+
+3. Partial compilation
+    Single source may be divided to more specific parts allowing for better dependency management. For example:
+    - AST (Unresolved structure)
+    - Structure (Resolved definitions of types and methods)
+    - Code (Resolved bodies of methods).
+    In such example code may depend only on structure of other classes. If structure of class is not changed then code may be modified without triggering any additional compilation.
+
+4. Compiler workspace
+    Compiler is allowed to persist compilation specific data, for example dependency map. Using workspace allows incremental compilation. Compiler must allow to build target without using workspace ( or using NullWorkspace implementation).
+
+5. Model first
+    Every aspect of environment is mainly defined by its model. Model is a canonical representation independent from source code. Model may depend only on target platform. (However it should not).

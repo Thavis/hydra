@@ -1,0 +1,20 @@
+<chapter title="Requirements"
+        xmlns="http://tnt-code.com/schema/hydra/doc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://tnt-code.com/schema/hydra/doc meta/schema.xsd">
+
+    <summary>Main requirements and targets assumed for language definitions.</summary>
+
+    List of main requirements:
+    <list>
+        <li>Language must support:
+            <list>
+                <li>grammar libraries</li>
+                <li>instruction overrides</li>
+                <li>instruction extensions</li>
+                <li>language injections</li>
+                <li>language embedding</li>
+            </list>
+        </li>
+    </list>
+</chapter>

@@ -1,0 +1,44 @@
+************************************************************
+* Compiling
+************************************************************
+
+def main() {
+01    return tailChain();
+}
+
+def tailChain() {
+02    return x || {
+03           tailChain()
+04           x }
+}
+
+xxxx
+
+S000:
+@ main -> 01 tailChain -> 02 x
+@ main -> 01 tailChain -> 03 tailChain+ -> 02 x
+x -> S001
+
+S001:
+@ main -> 01 tailChain -> return (02 x)
+@ main -> 01 tailChain -> 03 tailChain+ -> return (02 x)
+-----------------------------------------------------------
+@ main -> return (01 tailChain)
+@ main -> 01 tailChain -> 03 tailChain+ -> 04 x
+-----------------------------------------------------------
+@ main -> eof
+@ main -> 01 tailChain -> 03 tailChain+ -> 04 x
+eof: return V0
+
+x -> S002
+@ main -> 01 tailChain -> 03 tailChain+ -> return (04 x)
+-----------------------------------------------------------
+@ main -> 01 tailChain -> 03 tailChain+ -> return (04 x)
+@ main -> 01 tailChain -> return (tailchain)
+-----------------------------------------------------------
+@ main -> return (tailchain)
+@ main -> 01 tailChain -> 03 tailChain+ -> return (tailchain)
+-----------------------------------------------------------
+@ main -> eof
+@ main -> 01 tailChain -> 03 tailChain+ -> 04 x
+EQ: S001

@@ -1,0 +1,224 @@
+************************************************************
+* SIMPLE RECURRENCE
+************************************************************
+
+main:
+    expression
+expression:
+    argument
+    complexExpression
+argument:
+    expression
+    value
+complexExpression
+    argument operator argument
+
+
+// s000
+// main: $ expression
+// expression: $ argument
+// expression: $ complexExpression
+// argument: $ value
+// argument: $ expression
+// complexExpression: $ argument operator argument
+SM000: start
+value             -> s001
+argument          ->
+expression        ->
+complexExpression ->
+*                 -> ERROR expected expression
+
+//s001: s000 by value
+//  argument: value $ -> REDUCE argument -> s002
+//s002: s000 by argument
+//  expression: argument $ -> REDUCE expression -> s002
+//  complexExpression: argument $ operator argument -> S003
+//s002 + S003
+//s002: s000 by expression
+//  main: expression $ -> REDUCE main -> S004
+//  argument: expression $ -> REDUCE argument -> s006
+//S003: s000 by argument
+//  complexExpression: argument $ operator argument
+//S003 S004 s006
+//S004: s000 by main
+//  MAIN $
+//s006: s000 by argument
+//  ## EQ s002
+//  ## ERROR cyclic definition
+//     expression = argument
+//     argument = expression
+
+************************************************************
+* COMPLEX RECURRENCE
+************************************************************
+
+main:
+00    argument
+argument:
+01    expression
+02    value
+expression:
+03    argument operator argument
+
+S000:
+//00 S000 main: $ argument EOF
+//01 S000 argument: $ expression
+//02 S000 argument: $ value
+//03 S000 expression: $ argument operator argument
+value      -> S001
+
+S001: S000 by value
+//02 S000 argument: value $ REDUCE
+//======================================================
+//00 S000 main: argument $ EOF
+//03 S000 expression: argument $ operator argument
+EOF       -> S002
+operator  -> S003
+
+S002: S001 by EOF
+//00 S000 main: argument EOF $ DONE
+DONE
+
+S003: S001 by operator
+//03 S000 expression: argument operator $ argument
+//01 S003 argument: $ expression
+//02 S003 argument: $ value
+//03 S003 expression: $ argument operator argument
+value      -> S004
+
+S004: S003 by value
+//02 S003 argument: value $ REDUCE
+//======================================================
+//03 S000 expression: argument operator argument $ REDUCE
+//03 S003 expression: argument $ operator argument
+//======================================================
+//01 s000 argument: expression $ REDUCE
+//03 S003 expression: argument $ operator argument
+//======================================================
+//00 S000 main: argument $ EOF
+//03 S000 expression: argument $ operator argument
+//03 S003 expression: argument $ operator argument
+//## ERROR unable to match
+//   value operator value operator argument
+//   potential match
+//     ( (value operator value) operator argument)
+//     ( value operator (value operator argument))
+
+within variants:
+    startPoint1 + chain = startPoint2
+                 and
+    startPoint1 contiuation = startPoint2 contiuation
+                means
+    unresolvable chain:
+        chain + continuation
+
+************************************************************
+* LEFT RECURRENCE
+************************************************************
+
+main:
+00    argument
+argument:
+01    expression
+02    value
+expression:
+03    argument operator value
+
+S000:
+//00 S000 main: $ argument EOF
+//01 S000 argument: $ expression
+//02 S000 argument: $ value
+//03 S000 expression: $ argument operator value
+value      -> S001
+
+S001: S000 by value
+//02 S000 argument: value $ -> REDUCE argument
+//======================================================
+//00 S000 main: argument $ EOF
+//03 S000 expression: argument $ operator value
+EOF       -> S002
+operator  -> S003
+
+S002: S001 by EOF
+//00 S000 main: argument EOF $ -> DONE
+DONE
+
+S003: S001 by operator
+//03 S000 expression: argument operator $ value
+value      -> S004 = S001
+
+S004: S003 by value
+//03 S000 expression: argument operator value $ REDUCE expression
+//======================================================
+//01 S000 argument: expression $ REDUCE argument
+//======================================================
+//00 S000 main: argument $ EOF
+//03 S000 expression: argument $ operator value
+EQ S001
+
+************************************************************
+* RIGHT RECURRENCE
+************************************************************
+
+main:
+00    argument
+argument:
+01    expression
+02    value
+expression:
+03    value operator argument
+
+S000:
+//00 S000 main: $ argument EOF
+//======================================================
+//00 S000 main: $ argument EOF
+//01 S000 argument: $ expression
+//02 S000 argument: $ value
+//03 S000 expression: $ value operator argument
+value      -> S001
+
+S001: S000 by value
+//02 S000 argument: value $ -> REDUCE argument
+//03 S000 expression: value $ operator argument
+//======================================================
+//00 S000 main: argument $ EOF
+//03 S000 expression: value $ operator argument
+EOF       -> S002
+operator  -> S003
+
+S002: S001 by EOF
+//00 S000 main: argument EOF $ -> DONE
+DONE
+
+S003: S001 by operator
+//03 S000 expression: value operator $ argument
+//======================================================
+//03 S000 expression: value operator $ argument
+//01 S003 argument: $ expression
+//02 S003 argument: $ value
+//03 S003 expression: $ value operator argument
+value      -> S004 = S001
+
+S004: S003 by value
+//02 S003 argument: value $ REDUCE
+//03 S003 expression: value $ operator argument
+//======================================================
+//03 S000 expression: value operator argument $ REDUCE
+//03 S003 expression: $ value operator argument
+//======================================================
+//01 S000 argument: expression $ REDUCE
+//03 S003 expression: value $ operator argument
+//======================================================
+//00 S000 main: argument $ EOF
+//03 S003 expression: value $ operator argument
+EOF        -> S001
+operator   -> S003
+
+S005: S004 by operator
+//03 S003 expression: value operator $ argument
+//======================================================
+//03 S003 expression: value operator $ argument
+//01 S005 argument: $ expression
+//02 S005 argument: $ value
+//03 S005 expression: $ value operator argument
+EQ S003 // differs only in start points
